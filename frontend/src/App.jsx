@@ -28,7 +28,7 @@ import { setSocket } from './redux/userSlice'
 // 👇 NEW LINE: Import your new Chatbot component
 import Chatbot from './components/Chatbot' 
 
-export const serverUrl="http://localhost:8000" // Note: If your backend is 8000, make sure the Chatbot.jsx fetch URL uses port 8000 too!
+export const serverUrl="https://gastronomy.onrender.com" // Note: If your backend is 8000, make sure the Chatbot.jsx fetch URL uses port 8000 too!
 
 function App() {
   const {userData}=useSelector(state=>state.user)
