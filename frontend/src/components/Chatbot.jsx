@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { serverUrl } from '../App'; // ✨ NEW: Import the global URL
+import { useState, useRef, useEffect } from 'react';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +31,7 @@ const Chatbot = () => {
 
     try {
       // 2. Send the message to your Node.js backend
-      const response = await fetch('http://localhost:8000/api/ai/chat', {
+      const response = await fetch(`${serverUrl}/api/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMsg })
