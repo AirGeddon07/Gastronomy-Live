@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { serverUrl } from '../App'; // ✨ NEW: Import the global URL
-import { useState, useRef, useEffect } from 'react';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
