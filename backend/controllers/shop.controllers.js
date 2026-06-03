@@ -6,7 +6,6 @@ export const createEditShop = async (req, res) => {
        const {name, city, state, address} = req.body
        let image;
        
-       // Only upload if a file actually exists in the request
        if(req.file){
         console.log("File received for upload:", req.file.originalname)
         image = await uploadOnCloudinary(req.file.path)
@@ -15,18 +14,14 @@ export const createEditShop = async (req, res) => {
        let shop = await Shop.findOne({owner: req.userId})
        
        if(!shop){
-        // CREATE NEW SHOP
         shop = await Shop.create({
             name, city, state, address, image, owner: req.userId
         })
        } else {
-        // EDIT EXISTING SHOP
-        // ✨ FIX: We build an update object and only add the image if a new one was uploaded!
         const updateData = { name, city, state, address, owner: req.userId };
         if (image) {
             updateData.image = image;
         }
-
         shop = await Shop.findByIdAndUpdate(shop._id, updateData, {new: true})
        }
       
@@ -34,7 +29,6 @@ export const createEditShop = async (req, res) => {
        return res.status(201).json(shop)
        
     } catch (error) {
-        // ✨ FIX: Added console.error so your terminal tells you exactly why it failed (e.g., Cloudinary API issues)
         console.error("Shop Create/Edit Error:", error);
         return res.status(500).json({message: `create shop error ${error}`})
     }
@@ -69,5 +63,19 @@ export const getShopByCity = async (req, res) => {
         return res.status(200).json(shops)
     } catch (error) {
         return res.status(500).json({message: `get shop by city error ${error}`})
+    }
+}
+
+// ✨ NEW FIX: Fetches all shops globally, bypassing the city requirement
+export const getAllShops = async (req, res) => {
+    try {
+        const shops = await Shop.find({}).populate('items');
+        
+        if(!shops){
+            return res.status(400).json({message: "No shops found"})
+        }
+        return res.status(200).json(shops)
+    } catch (error) {
+        return res.status(500).json({message: `get all shops error: ${error}`})
     }
 }
