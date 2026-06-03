@@ -7,11 +7,9 @@ import { FaCircleChevronRight } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
 import FoodCard from './FoodCard';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { serverUrl } from '../App';
 
 function UserDashboard() {
-  const {currentCity, shopInMyCity, itemsInMyCity, searchItems} = useSelector(state => state.user)
+  const {shopInMyCity, itemsInMyCity, searchItems} = useSelector(state => state.user)
   const cateScrollRef = useRef()
   const shopScrollRef = useRef()
   const navigate = useNavigate()
@@ -21,11 +19,9 @@ function UserDashboard() {
   const [showRightShopButton, setShowRightShopButton] = useState(false)
   
   const [updatedItemsList, setUpdatedItemsList] = useState([])
-  // ✨ NEW: State to track the active category filter
   const [activeCategory, setActiveCategory] = useState("All") 
 
   const handleFilterByCategory = (category) => {
-    // If they click the same category again, toggle it off (back to "All")
     if(activeCategory === category) {
         setActiveCategory("All")
         setUpdatedItemsList(itemsInMyCity)
@@ -107,7 +103,7 @@ function UserDashboard() {
                 image={cate.image} 
                 key={index} 
                 onClick={() => handleFilterByCategory(cate.category)}
-                isActive={activeCategory === cate.category} // ✨ NEW: Passes true if this category is selected
+                isActive={activeCategory === cate.category}
               />
             ))}
           </div>
@@ -117,7 +113,8 @@ function UserDashboard() {
       </div>
 
       <div className='w-full max-w-6xl flex flex-col gap-4 items-start px-4'>
-        <h1 className='text-gray-800 dark:text-gray-100 text-2xl sm:text-3xl font-bold tracking-tight'>Best Shops in {currentCity}</h1>
+        {/* ✨ FIX: Updated Text to be global */}
+        <h1 className='text-gray-800 dark:text-gray-100 text-2xl sm:text-3xl font-bold tracking-tight'>Explore All Restaurants</h1>
         <div className='w-full relative'>
           {showLeftShopButton &&  <button className='absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/60 backdrop-blur-md text-[#ff4d2d] dark:text-[#f97316] p-2 rounded-full shadow-lg hover:scale-110 transition-transform z-10' onClick={() => scrollHandler(shopScrollRef,"left")}><FaCircleChevronLeft size={28} /></button>}
          
@@ -136,11 +133,11 @@ function UserDashboard() {
           {activeCategory !== "All" ? `Suggested ${activeCategory}` : "Suggested Food Items"}
         </h1>
         
-        {/* ✨ NEW: Shows a message if the filter finds nothing */}
         {updatedItemsList?.length === 0 ? (
             <div className="text-center py-10 bg-white dark:bg-[#1e1e1e] w-full rounded-3xl border border-gray-100 dark:border-gray-800">
                 <div className="text-6xl mb-4 opacity-50">🍽️</div>
-                <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">No items found in {currentCity} for this category.</p>
+                {/* ✨ FIX: Updated Text to be global */}
+                <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">No items found for this category.</p>
                 <button onClick={() => handleFilterByCategory("All")} className="mt-4 text-[#ff4d2d] font-bold hover:underline">View All Items</button>
             </div>
         ) : (
